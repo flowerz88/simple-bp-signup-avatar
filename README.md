@@ -43,7 +43,15 @@ For detailed information about using this plugin, please refer to the following 
 - Initial release of Simple Buddypress Signup Avatar. Enjoy!
 
 ## Support
-For support, please create an issue in the [GitHub repository](https://github.com/flowerz88/simple-bp-signup-avatar) or contact the [plugin author](https://github.com/flowerz88).
+
+For support, you have several options:
+
+1. Create an issue in the [GitHub repository](https://github.com/flowerz88/simple-bp-signup-avatar).
+2. Contact the [plugin author](https://github.com/flowerz88) directly.
+3. Open a support ticket on the [WordPress.org plugin forum](https://wordpress.org/support/plugin/simple-buddypress-signup-avatar/).
+
+We strive to provide timely and helpful support through all these channels. Please provide as much detail as possible about your issue to help us assist you more effectively.
+
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
