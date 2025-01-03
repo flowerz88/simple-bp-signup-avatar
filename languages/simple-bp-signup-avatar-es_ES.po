@@ -1,0 +1,112 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom BP Avatar Upload\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 19:49+0000\n"
+"PO-Revision-Date: 2025-01-03 12:18+0000\n"
+"Last-Translator: \n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.14; wp-6.7.1\n"
+"X-Domain: custom-bp-avatar-upload"
+
+#: admin-settings.php:79
+msgid "100 = no compression (highest quality)"
+msgstr "100 = sin compresión (máxima calidad)"
+
+#. Description of the plugin
+msgid "Add an avatar upload field to the BuddyPress registration form."
+msgstr ""
+"Agregue un campo de carga de avatar al formulario de registro de BuddyPress."
+
+#. %d is the maximum dimension for both width and height in pixels
+#: bp_avatar_registration.php:68 bp_avatar_registration.php:126
+msgid "Avatar dimensions are too large. Maximum width and height is %d pixels."
+msgstr ""
+"Las dimensiones del avatar son demasiado grandes. El ancho y la altura "
+"máximos son %d píxeles."
+
+#. %d is the maximum file size in megabytes
+#: bp_avatar_registration.php:66 bp_avatar_registration.php:100
+#, php-format
+#| msgid "Avatar is too large. Maximum file size is %d MB."
+msgid "Avatar is too large. Maximum file size is %1$d MB."
+msgstr ""
+"El avatar es demasiado grande. El tamaño máximo del archivo es %1$d MB."
+
+#: admin-settings.php:54
+msgid "Avatar Required"
+msgstr "Se requiere avatar"
+
+#: bp_avatar_registration.php:184
+msgid "Avatar upload failed. Please try again."
+msgstr "Error al cargar el avatar. Inténtalo de nuevo."
+
+#: bp_avatar_registration.php:187
+msgid "Avatar upload is required."
+msgstr "Es necesario cargar avatar."
+
+#: bp_avatar_registration.php:69
+msgid "Failed to load image. Please try another file."
+msgstr "No se pudo cargar la imagen. Intente con otro archivo."
+
+#: bp_avatar_registration.php:181
+msgid "Failed to process the uploaded image. Please try again."
+msgstr "No se pudo procesar la imagen cargada. Inténtalo nuevamente."
+
+#: admin-settings.php:75
+msgid "Image Compression"
+msgstr "Compresión de imagen"
+
+#: bp_avatar_registration.php:64
+msgid "Invalid file type. Please upload a JPEG, PNG or GIF image."
+msgstr "Tipo de archivo no válido. Cargue una imagen JPEG, PNG o GIF."
+
+#: admin-settings.php:58
+msgid "Make avatar upload mandatory"
+msgstr "Hacer obligatoria la carga del avatar"
+
+#: admin-settings.php:69
+msgid "Max Dimensions (pixels)"
+msgstr "Dimensiones máximas (píxeles)"
+
+#: admin-settings.php:63
+msgid "Max File Size (MB)"
+msgstr "Tamaño máximo de archivo (MB)"
+
+#: admin-settings.php:83
+msgid "Save Settings"
+msgstr "Guardar configuración"
+
+#: bp_avatar_registration.php:86
+msgid "Security check failed. Please try again."
+msgstr "Error en la comprobación de seguridad. Inténtalo de nuevo."
+
+#: admin-settings.php:35
+msgid "Settings saved."
+msgstr "Configuración guardada."
+
+#: admin-settings.php:9
+msgid "Simple BP Signup Avatar"
+msgstr ""
+
+#. Name of the plugin
+msgid "Simple BuddyPress Signup Avatar"
+msgstr ""
+
+#: admin-settings.php:8
+msgid "Simple Buddypress Signup Avatar Settings"
+msgstr "Simple Buddypress Signup Avatar Ajustes"
+
+#: bp_avatar_registration.php:53
+msgid "Upload Your Avatar (optional)"
+msgstr "Sube tu avatar (opcional)"
+
+#: bp_avatar_registration.php:53
+msgid "Upload Your Avatar (required)"
+msgstr "Sube tu avatar (requerido)"
