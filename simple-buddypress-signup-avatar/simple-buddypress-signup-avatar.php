@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple BuddyPress Signup Avatar
-Plugin URI: https://github.com/flowerz88/simple-buddypress-signup-avatar
+Plugin URI: https://github.com/flowerz88/simple-bp-signup-avatar
 Description: Enhances BuddyPress registration by allowing users to upload avatars during sign-up.
 Version: 1.0
 Author: Butterfly88
