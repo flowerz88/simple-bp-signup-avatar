@@ -1,7 +1,7 @@
 # Simple Buddypress Signup Avatar
 
 ## Description
-Whether you're running a community site, a social network, or any BuddyPress-powered platform, Custom BP Avatar Upload helps you create a more engaging and personalized user experience from the very beginning. Simple Buddypress Signup Avatar enhances the BuddyPress registration process by allowing users to upload their avatar during sign-up.
+Whether you're running a community site, a social network, or any BuddyPress-powered platform, Simple BuddyPress Signup Avatar helps you create a more engaging and personalized user experience from the very beginning. Simple Buddypress Signup Avatar enhances the BuddyPress registration process by allowing users to upload their avatar during sign-up.
 
 This plugin is specifically designed for BuddyPress installations that use email confirmation and/or admin approval for new registrations. It provides a seamless integration with BuddyPress, offering customizable options for avatar uploads including file size limits, dimension restrictions, and image compression. Temporary avatars are securely stored and managed until account activation, whether through email confirmation or admin approval.
 
