@@ -50,12 +50,10 @@ Simple BuddyPress Signup Avatar is translation-ready and supports any WordPress-
    If you're comfortable with translation tools, you can create .po and .mo files for your language and place them in the plugin's '/languages' directory.
 
 3. Contribute your translations:
-   We welcome community translations! If you've translated the plugin, you can send us your translation files (.po and .mo) and we'll be happy to include them in the next release. This helps other users who speak your language.
+   We welcome community translations! If you've translated the plugin, you can suggest your translations through the WordPress [Translation Platform (GlotPress)](https://translate.wordpress.org/projects/wp-plugins/simple-buddypress-signup-avatar/)
 
 4. Request a translation:
-   If you need the plugin in a specific language but can't create the translation yourself, open an issue on our GitHub repository. The community or our team might be able to help.
-
-To contribute or request translations, please visit our [GitHub repository](https://github.com/flowerz88/simple-bp-signup-avatar) and open an issue or pull request.
+   If you need the plugin in a specific language but can’t create the translation yourself, you can request it on the WordPress Polyglots forum. The translation community or a Project Translation Editor (PTE) for your language may be able to help.
 
 Remember, the plugin uses the textdomain 'simple-buddypress-signup-avatar' for all its translatable strings.
 
