@@ -9,8 +9,38 @@ define('SBSA_DEFAULTS', [
     'max_dimensions' => 1024,
     'compression' => 85,
 ]);
-define('SBSA_TEMP_DIR', 'temp_signup_avatars');
-register_activation_hook(__FILE__, 'sbsa_create_temp_dir');
+define('SBSA_TEMP_DIR', 'temp_signup_avatars'); // Folder to temporarily store avatars
+
+// Create safe folder to store temporary avatars during signup
+add_action('init', function() {
+    $upload_dir = wp_upload_dir();
+    $temp_dir = $upload_dir['basedir'] . '/' . SBSA_TEMP_DIR;
+    
+    if (!file_exists($temp_dir)) {
+        $created = wp_mkdir_p($temp_dir);
+        
+        if ($created) {
+            // Index base
+            file_put_contents($temp_dir . '/index.php', "<?php\n// Silence is golden");
+            
+            // .htaccess security
+            $htaccess_content = "Options -Indexes\n";
+            $htaccess_content .= "<Files ~ \"^.*\.(php|php3|php4|php5|php6|php7|phtml|pl|py|jsp|asp|aspx|cgi)$\">\n";
+            $htaccess_content .= "    deny from all\n";
+            $htaccess_content .= "</Files>\n";
+            $htaccess_content .= "<IfModule mod_php.c>\n";
+            $htaccess_content .= "    php_flag engine off\n";
+            $htaccess_content .= "</IfModule>\n";
+            
+            file_put_contents($temp_dir . '/.htaccess', $htaccess_content);
+            
+            // Set permissions
+            chmod($temp_dir, 0755);
+            chmod($temp_dir . '/index.php', 0644);
+            chmod($temp_dir . '/.htaccess', 0644);
+        }
+    }
+});
 
 function sbsa_get_settings() {
     $cache_key = 'sbsa_settings';
@@ -23,27 +53,6 @@ function sbsa_get_settings() {
 
     return $settings;
 }
-
-// Store temporary avatars in designated folder
-function sbsa_create_temp_dir() {
-    $upload_dir = wp_upload_dir();
-    $base_dir = $upload_dir['basedir'];
-    $temp_dir = $base_dir . '/' . SBSA_TEMP_DIR;
-    
-    if (!file_exists($temp_dir)) {
-        wp_mkdir_p($temp_dir);
-    }
-    
-    // .htaccess security
-    $htaccess_file = $temp_dir . '/.htaccess';
-    if (!file_exists($htaccess_file)) {
-        $htaccess_content = "Options -Indexes\nDeny from all";
-        WP_Filesystem();
-        global $wp_filesystem;
-        $wp_filesystem->put_contents($htaccess_file, $htaccess_content, FS_CHMOD_FILE);
-    }
-}
-
 
 // Hook to add the avatar upload field to the registration form
 function sbsa_add_avatar_field_to_registration_form() {
@@ -64,9 +73,7 @@ function sbsa_add_avatar_field_to_registration_form() {
 
     wp_localize_script('avatar-upload-helper', 'avatarUploadStrings', array(
         'invalidType' => __('Invalid file type. Please upload a JPEG, PNG or GIF image.', 'simple-buddypress-signup-avatar'),
-        // translators: %d is the maximum file size in megabytes
         'fileTooLarge' => sprintf(__('Avatar is too large. Maximum file size is %1$d MB.', 'simple-buddypress-signup-avatar'), $options['max_file_size']),
-        // translators: %d is the maximum dimension for both width and height in pixels
         'dimensionsTooLarge' => sprintf(__('Avatar dimensions are too large. Maximum width and height is %d pixels.', 'simple-buddypress-signup-avatar'), $options['max_dimensions'], $options['max_dimensions']),
         'loadFailed' => __('Failed to load image. Please try another file.', 'simple-buddypress-signup-avatar'),
         'maxFileSize' => $options['max_file_size'] * 1024 * 1024,
@@ -79,65 +86,101 @@ add_action('bp_after_signup_profile_fields', 'sbsa_add_avatar_field_to_registrat
 
 // Process the avatar upload during registration
 function sbsa_handle_avatar_upload_during_registration() {
-    // Get current settings at the beginning of the function
-    $options = sbsa_get_settings();
-    $max_file_size = $options['max_file_size'] * 1024 * 1024; // Convert MB to bytes
-    $max_dimensions = $options['max_dimensions'];
+    try {
+        // Get current settings at the beginning of the function
+        $options = sbsa_get_settings();
+        $max_file_size = $options['max_file_size'] * 1024 * 1024; // Convert MB to bytes
+        $max_dimensions = $options['max_dimensions'];
 
-    if (!isset($_POST['sbsa_avatar_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['sbsa_avatar_nonce'])), 'sbsa_avatar_upload')) {
-    bp_core_add_message(__('Security check failed. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
-    return;
-    }
-
-        if (!empty($_FILES['signup_avatar']['name'])) {
-        $file_name = sanitize_file_name($_FILES['signup_avatar']['name']);
-        $file_size = isset($_FILES['signup_avatar']['size']) ? intval($_FILES['signup_avatar']['size']) : 0;
-        $file_tmp = isset($_FILES['signup_avatar']['tmp_name']) ? sanitize_text_field($_FILES['signup_avatar']['tmp_name']) : '';
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-        require_once ABSPATH . 'wp-admin/includes/image.php';
-
-        // Check file size
-        if ($_FILES['signup_avatar']['size'] > $max_file_size) {
-            // translators: %d is the maximum file size in megabytes
-            bp_core_add_message(sprintf(__('Avatar is too large. Maximum file size is %1$d MB.', 'simple-buddypress-signup-avatar'), $options['max_file_size']), 'error');
+        if (!isset($_POST['sbsa_avatar_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['sbsa_avatar_nonce'])), 'sbsa_avatar_upload')) {
+            bp_core_add_message(__('Security check failed. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
             return;
         }
 
-        $upload_dir = wp_upload_dir();
-        $temp_dir = $upload_dir['basedir'] . '/' . SBSA_TEMP_DIR;
-        
-        // Ensure the temporary directory exists
-        if (!file_exists($temp_dir)) {
-            wp_mkdir_p($temp_dir);
-        }
+        if (!empty($_FILES['signup_avatar']['name'])) {
+            $file_name = sanitize_file_name($_FILES['signup_avatar']['name']);
+            $file_size = isset($_FILES['signup_avatar']['size']) ? intval($_FILES['signup_avatar']['size']) : 0;
+            $file_tmp = isset($_FILES['signup_avatar']['tmp_name']) ? sanitize_text_field($_FILES['signup_avatar']['tmp_name']) : '';
+            
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
 
-        // Use a unique filename to prevent overwriting
-        $filename = wp_unique_filename($temp_dir, $file_name);
-        $new_file = $temp_dir . '/' . $filename;
-
-        // Move the uploaded file to our temporary directory
-            $upload_overrides = array('test_form' => false);
-            $movefile = wp_handle_upload($_FILES['signup_avatar'], $upload_overrides);
-            if ($movefile && !isset($movefile['error'])) {
-                $new_file = $movefile['file'];
-            // Validate image dimensions
-            list($width, $height) = getimagesize($new_file);
-            if ($width > $max_dimensions || $height > $max_dimensions) {
-                wp_delete_file($new_file);
-            // translators: %d is the maximum dimension for both width and height in pixels
-            bp_core_add_message(sprintf(__('Avatar dimensions are too large. Maximum width and height is %d pixels.', 'simple-buddypress-signup-avatar'), $max_dimensions), 'error');
+            // Check file size
+            if ($_FILES['signup_avatar']['size'] > $max_file_size) {
+                bp_core_add_message(sprintf(__('Avatar is too large. Maximum file size is %1$d MB.', 'simple-buddypress-signup-avatar'), $options['max_file_size']), 'error');
                 return;
             }
 
-            // Process the image
-            $image = wp_get_image_editor($new_file);
-            if (!is_wp_error($image)) {
+            $upload_dir = wp_upload_dir();
+            $temp_dir = $upload_dir['basedir'] . '/' . SBSA_TEMP_DIR;
+            
+            // Ensure the temporary directory exists
+            if (!file_exists($temp_dir)) {
+                wp_mkdir_p($temp_dir);
+            }
+            
+            // Set unique filename
+            $filename = uniqid('avatar_') . '_' . $file_name;
+            $new_file = $temp_dir . '/' . $filename;
+            
+            // Copy file
+            if (move_uploaded_file($_FILES['signup_avatar']['tmp_name'], $new_file)) {
+                // Set file permissions
+                chmod($new_file, 0644);
+                
+                // Check filetype
+                $file_type = wp_check_filetype($new_file);
+                
+                if (!in_array($file_type['type'], ['image/jpeg', 'image/png', 'image/gif'])) {
+                    wp_delete_file($new_file);
+                    bp_core_add_message(__('Invalid file type. Please upload a JPEG, PNG or GIF image.', 'simple-buddypress-signup-avatar'), 'error');
+                    return;
+                }
+                
+                // Validate image dimensions
+                $image_info = @getimagesize($new_file);
+                if ($image_info === false) {
+                    wp_delete_file($new_file);
+                    bp_core_add_message(__('Failed to process the uploaded image. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
+                    return;
+                }
+                
+                list($width, $height) = $image_info;
+
+            // MIME type verification
+                if (function_exists('finfo_open')) {
+                    $allowed_mime = ['image/jpeg', 'image/png', 'image/gif'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $actual_mime = finfo_file($finfo, $new_file);
+                    finfo_close($finfo);
+    
+                if (!in_array($actual_mime, $allowed_mime)) {
+                    wp_delete_file($new_file);
+                    bp_core_add_message(__('Invalid file type detected.', 'simple-buddypress-signup-avatar'), 'error');
+                    return;
+                }
+            }
+                
+                if ($width > $max_dimensions || $height > $max_dimensions) {
+                    wp_delete_file($new_file);
+                    bp_core_add_message(sprintf(__('Avatar dimensions are too large. Maximum width and height is %d pixels.', 'simple-buddypress-signup-avatar'), $max_dimensions), 'error');
+                    return;
+                }
+
+                // Process the image
+                $image = wp_get_image_editor($new_file);
+                if (is_wp_error($image)) {
+                    wp_delete_file($new_file);
+                    bp_core_add_message(__('Failed to process the uploaded image. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
+                    return;
+                }
+
                 // Crop to square
                 $size = min($width, $height);
-                $image->crop(($width - $size) / 2, ($height - $size) / 2, $size, $size);
-
+                $crop_result = $image->crop(($width - $size) / 2, ($height - $size) / 2, $size, $size);
+                
                 // Resize to 150x150
-                $image->resize(150, 150, true);
+                $resize_result = $image->resize(150, 150, true);
 
                 // Set quality based on compression setting
                 $quality = $options['compression'];
@@ -146,7 +189,12 @@ function sbsa_handle_avatar_upload_during_registration() {
                 }
 
                 // Save the processed image
-                $image->save($new_file);
+                $save_result = $image->save($new_file);
+                if (is_wp_error($save_result)) {
+                    wp_delete_file($new_file);
+                    bp_core_add_message(__('Failed to save the processed image. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
+                    return;
+                }
 
                 // Manually remove EXIF data
                 sbsa_remove_exif($new_file);
@@ -157,36 +205,34 @@ function sbsa_handle_avatar_upload_during_registration() {
                     global $wpdb;
                     $table_name = bp_core_get_table_prefix() . 'signups';
                     $signup_id = $wpdb->get_var(
-                    $wpdb->prepare("SELECT signup_id FROM `{$wpdb->prefix}signups` WHERE user_email = %s", $user_email)
+                        $wpdb->prepare("SELECT signup_id FROM `{$wpdb->prefix}signups` WHERE user_email = %s", $user_email)
                     );
 
                     if ($signup_id) {
                         $current_meta = $wpdb->get_var(
-                        $wpdb->prepare("SELECT meta FROM `{$wpdb->prefix}signups` WHERE signup_id = %d", $signup_id)
+                            $wpdb->prepare("SELECT meta FROM `{$wpdb->prefix}signups` WHERE signup_id = %d", $signup_id)
                         );
                         $meta_data = $current_meta ? maybe_unserialize($current_meta) : [];
                         $meta_data['temporary_avatar'] = $new_file;
 
-                        $wpdb->update(
+                        $update_result = $wpdb->update(
                             $table_name,
                             ['meta' => maybe_serialize($meta_data)],
                             ['signup_id' => $signup_id],
                             ['%s'],
                             ['%d']
                         );
-                    } else {
-                        // error_log('Failed to retrieve signup ID for temporary avatar storage.');
                     }
                 }
             } else {
-                wp_delete_file($new_file);
-                bp_core_add_message(__('Failed to process the uploaded image. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
+                bp_core_add_message(__('Avatar upload failed. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
             }
-        } else {
-            bp_core_add_message(__('Avatar upload failed. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
+        } elseif ($options['avatar_required']) {
+            bp_core_add_message(__('Avatar upload is required.', 'simple-buddypress-signup-avatar'), 'error');
         }
-    } elseif ($options['avatar_required']) {
-        bp_core_add_message(__('Avatar upload is required.', 'simple-buddypress-signup-avatar'), 'error');
+        
+    } catch (Exception $e) {
+        bp_core_add_message(__('An error occurred while processing your avatar. Please try again.', 'simple-buddypress-signup-avatar'), 'error');
     }
 }
 add_action('bp_signup_validate', 'sbsa_handle_avatar_upload_during_registration');
@@ -200,10 +246,11 @@ function sbsa_remove_exif($file_path) {
 
     if (function_exists('exif_read_data')) {
         $image_type = exif_imagetype($file_path);
+        
         if ($image_type == IMAGETYPE_JPEG) {
-            $img = imagecreatefromjpeg($file_path);
+            $img = @imagecreatefromjpeg($file_path);
             if ($img !== false) {
-                imagejpeg($img, $file_path, $options['compression']);
+                $result = imagejpeg($img, $file_path, $options['compression']);
                 imagedestroy($img);
             }
         }
@@ -219,16 +266,21 @@ function sbsa_move_avatar_after_activation($user_id) {
     $options = sbsa_get_settings();
 
     // Retrieve user email using the WordPress user data
-    $user_email = get_userdata($user_id)->user_email;
+    $user_data = get_userdata($user_id);
+    if (!$user_data) {
+        return;
+    }
+    
+    $user_email = $user_data->user_email;
 
     if ($user_email) {
-    $signup = $wpdb->get_row(
-        $wpdb->prepare("SELECT * FROM `{$wpdb->prefix}signups` WHERE user_email = %s", $user_email)
-    );
-
-            if ($signup && $signup->meta) {
-                $meta_data = maybe_unserialize($signup->meta);
-                $temp_avatar_path = $meta_data['temporary_avatar'] ?? '';
+        $signup = $wpdb->get_row(
+            $wpdb->prepare("SELECT * FROM `{$wpdb->prefix}signups` WHERE user_email = %s", $user_email)
+        );
+        
+        if ($signup && $signup->meta) {
+            $meta_data = maybe_unserialize($signup->meta);
+            $temp_avatar_path = $meta_data['temporary_avatar'] ?? '';
 
             if ($temp_avatar_path && file_exists($temp_avatar_path)) {
                 // Define the final avatar directory
@@ -250,11 +302,21 @@ function sbsa_move_avatar_after_activation($user_id) {
                     }
 
                     // Save the full version
-                    $image->save($avatar_dir . '/' . $full_name);
+                    $full_result = $image->save($avatar_dir . '/' . $full_name);
+                    if (!is_wp_error($full_result)) {
+                        // Set file permissions
+                        chmod($avatar_dir . '/' . $full_name, 0644);
+                    }
 
                     // Resize and save the thumbnail version
-                    $image->resize(50, 50, true);
-                    $image->save($avatar_dir . '/' . $thumbnail_name);
+                    $resize_result = $image->resize(50, 50, true);
+                    if (!is_wp_error($resize_result)) {
+                        $thumb_result = $image->save($avatar_dir . '/' . $thumbnail_name);
+                        if (!is_wp_error($thumb_result)) {
+                            // Set file permissions
+                            chmod($avatar_dir . '/' . $thumbnail_name, 0644);
+                        }
+                    }
                 }
 
                 // Delete the temporary avatar file
@@ -262,7 +324,7 @@ function sbsa_move_avatar_after_activation($user_id) {
 
                 // Update user meta for avatar
                 update_user_meta($user_id, 'has_custom_avatar', true);
-
+                
                 // Ensure BuddyPress recognizes the avatar
                 bp_members_get_user_url($user_id);
 
@@ -275,11 +337,6 @@ function sbsa_move_avatar_after_activation($user_id) {
                     ['%s'],
                     ['%s']
                 );
-            } else {
-                if ($options['avatar_required']) {
-                    // Optional: Log an error or take other action if an avatar is required but not found
-                    // error_log("Required avatar not found for user $user_id during activation");
-                }
             }
         }
     }
@@ -294,13 +351,12 @@ function sbsa_cleanup_temporary_avatars() {
     $temp_dir = $upload_dir['basedir'] . '/' . SBSA_TEMP_DIR;
 
     // Get inactive signups older than 7 days
-    $inactive_signups = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT id, meta FROM {$wpdb->prefix}signups WHERE active = 0 AND registered < %s",
-            gmdate('Y-m-d H:i:s', strtotime('-7 days'))
-        ),
-        ARRAY_A
+    $query = $wpdb->prepare(
+        "SELECT signup_id, meta FROM {$wpdb->prefix}signups WHERE active = 0 AND registered < %s",
+        gmdate('Y-m-d H:i:s', strtotime('-7 days'))
     );
+    
+    $inactive_signups = $wpdb->get_results($query, ARRAY_A);
 
     if (!empty($inactive_signups)) {
         foreach ($inactive_signups as $signup) {
@@ -309,14 +365,14 @@ function sbsa_cleanup_temporary_avatars() {
                 $temp_avatar_path = $meta_data['temporary_avatar'] ?? '';
 
                 if ($temp_avatar_path && file_exists($temp_avatar_path)) {
-                    wp_delete_file($temp_avatar_path);
+                    $delete_result = wp_delete_file($temp_avatar_path);
 
                     // Remove the temporary avatar from meta
                     unset($meta_data['temporary_avatar']);
-                    $wpdb->update(
+                    $update_result = $wpdb->update(
                         $table_name,
                         ['meta' => maybe_serialize($meta_data)],
-                        ['id' => $signup['id']],
+                        ['signup_id' => $signup['signup_id']],
                         ['%s'],
                         ['%d']
                     );
@@ -326,11 +382,16 @@ function sbsa_cleanup_temporary_avatars() {
     }
 
     // Clean up orphaned files
-    $files = glob($temp_dir . '/*');
-    $current_time = time();
-    foreach ($files as $file) {
-        if (is_file($file) && ($current_time - filemtime($file) > 7 * 24 * 60 * 60)) {
-            wp_delete_file($file);
+    if (file_exists($temp_dir)) {
+        $files = glob($temp_dir . '/*');
+        $current_time = time();
+        foreach ($files as $file) {
+            if (is_file($file) && basename($file) !== 'index.php' && basename($file) !== '.htaccess') {
+                $file_age = $current_time - filemtime($file);
+                if ($file_age > 7 * 24 * 60 * 60) {
+                    wp_delete_file($file);
+                }
+            }
         }
     }
 }
