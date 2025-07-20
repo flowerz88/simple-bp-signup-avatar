@@ -1,74 +1,101 @@
+# Translation of Plugins - Simple BuddyPress Signup Avatar - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - Simple BuddyPress Signup Avatar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Custom BP Avatar Upload\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-31 20:30+0000\n"
-"PO-Revision-Date: 2025-01-04 11:13+0000\n"
-"Last-Translator: \n"
-"Language-Team: Nederlands\n"
-"Language: nl_NL\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2025-07-20 17:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.14; wp-6.7.1\n"
-"X-Domain: custom-bp-avatar-upload"
+"Language: nl_NL\n"
+"Project-Id-Version: Plugins - Simple BuddyPress Signup Avatar - Stable "
+"(latest release)\n"
+"Language-Team: Nederlands"
 
 #: admin-settings.php:77
 msgid "100 = no compression (highest quality)"
 msgstr "100 = geen compressie (hoogste kwaliteit)"
 
-#. %d is the maximum dimension for both width and height in pixels
-#: bp_avatar_registration.php:70 bp_avatar_registration.php:128
+#: bp_avatar_registration.php:235
+msgid "An error occurred while processing your avatar. Please try again."
+msgstr ""
+"Er is een fout opgetreden met het uploaden van je avatar. Probeer het "
+"opnieuw."
+
+#: bp_avatar_registration.php:77 bp_avatar_registration.php:166
 msgid "Avatar dimensions are too large. Maximum width and height is %d pixels."
 msgstr ""
 "Avatar afmetingen zijn te groot. Maximale breedte en hoogte is %d pixels."
 
-#. %d is the maximum file size in megabytes
-#: bp_avatar_registration.php:68 bp_avatar_registration.php:102
+#: bp_avatar_registration.php:76 bp_avatar_registration.php:110
 #, php-format
-#| msgid "Avatar is too large. Maximum file size is %d MB."
 msgid "Avatar is too large. Maximum file size is %1$d MB."
-msgstr "Avatar is te groot. De maximale bestandsgrootte is %1$d  MB."
+msgstr "Avatar is te groot. De maximale bestandsgrootte is %1$d MB."
 
 #: admin-settings.php:52
 msgid "Avatar Required"
-msgstr "Avatar verplicht"
+msgstr "Avatar vereist"
 
-#: bp_avatar_registration.php:186
+#: bp_avatar_registration.php:228
 msgid "Avatar upload failed. Please try again."
 msgstr "Avatar uploaden mislukt. Probeer het opnieuw."
 
-#: bp_avatar_registration.php:189
+#: bp_avatar_registration.php:231
 msgid "Avatar upload is required."
 msgstr "Uploaden van avatar is vereist."
+
+#. Author of the plugin
+msgid "Butterfly88"
+msgstr "Butterfly88"
 
 #. Description of the plugin
 msgid ""
 "Enhances BuddyPress registration by allowing users to upload avatars during "
 "sign-up."
 msgstr ""
-"Verbetert de BuddyPress-registratie ervaring door gebruikers toe te staan "
+"Verbetert de BuddyPress registratie ervaring door gebruikers toe te staan "
 "​​avatars te uploaden tijdens de registratie."
 
-#: bp_avatar_registration.php:71
+#: bp_avatar_registration.php:78
 msgid "Failed to load image. Please try another file."
 msgstr "Afbeelding laden mislukt. Probeer een ander bestand."
 
-#: bp_avatar_registration.php:183
+#: bp_avatar_registration.php:144 bp_avatar_registration.php:174
 msgid "Failed to process the uploaded image. Please try again."
 msgstr ""
 "Het is niet gelukt om de geüploade afbeelding te verwerken. Probeer het "
 "opnieuw."
 
+#: bp_avatar_registration.php:195
+msgid "Failed to save the processed image. Please try again."
+msgstr ""
+"Het is niet gelukt om de geüploade afbeelding te verwerken. Probeer het "
+"opnieuw."
+
+#. Author URI of the plugin
+msgid "https://github.com/flowerz88"
+msgstr "https://github.com/flowerz88"
+
+#. URI of the plugin
+msgid "https://github.com/flowerz88/simple-bp-signup-avatar"
+msgstr "https://github.com/flowerz88/simple-bp-signup-avatar"
+
 #: admin-settings.php:73
 msgid "Image Compression"
 msgstr "Afbeeldingscompressie"
 
-#: bp_avatar_registration.php:66
+#: bp_avatar_registration.php:159
+msgid "Invalid file type detected."
+msgstr "Ongeldig bestandstype"
+
+#: bp_avatar_registration.php:75 bp_avatar_registration.php:136
 msgid "Invalid file type. Please upload a JPEG, PNG or GIF image."
-msgstr "Ongeldig bestandstype. Upload een JPEG-, PNG- of GIF-afbeelding."
+msgstr "Ongeldig bestandstype. Upload een JPEG, PNG of GIF afbeelding."
+
+#: simple-buddypress-signup-avatar.php:113
+msgid "Leave a Review"
+msgstr "Laat een review achter"
 
 #: admin-settings.php:56
 msgid "Make avatar upload mandatory"
@@ -76,40 +103,60 @@ msgstr "Maak het uploaden van een avatar verplicht"
 
 #: admin-settings.php:67
 msgid "Max Dimensions (pixels)"
-msgstr "Max Dimensies (pixels)"
+msgstr "Max. afmetingen (pixels)"
 
 #: admin-settings.php:61
 msgid "Max File Size (MB)"
-msgstr "Max Bestandsgrootte (MB)"
+msgstr "Max bestandsgrootte (MB)"
+
+#: simple-buddypress-signup-avatar.php:115
+msgid "Never show again"
+msgstr "Niet opnieuw tonen"
+
+#: simple-buddypress-signup-avatar.php:114
+msgid "Remind me later"
+msgstr "Niet nu"
 
 #: admin-settings.php:81
 msgid "Save Settings"
 msgstr "Instellingen opslaan"
 
-#: bp_avatar_registration.php:88
+#: bp_avatar_registration.php:96
 msgid "Security check failed. Please try again."
 msgstr "Beveiligingscontrole mislukt. Probeer het opnieuw."
 
 #: admin-settings.php:33
 msgid "Settings saved."
-msgstr "Ingestellingen opgeslagen"
+msgstr "Instellingen opgeslagen."
 
 #: admin-settings.php:7
 msgid "Simple BP Signup Avatar"
-msgstr ""
+msgstr "Eenvoudige aanmeldingsavatar voor BP"
 
 #. Name of the plugin
 msgid "Simple BuddyPress Signup Avatar"
-msgstr ""
+msgstr "Simple BuddyPress Signup Avatar"
 
 #: admin-settings.php:6
 msgid "Simple Buddypress Signup Avatar Settings"
-msgstr "Simple Buddypress Signup Avatar Instellingen"
+msgstr "Simple Buddypress Signup Avatar instellingen"
 
-#: bp_avatar_registration.php:55
+#: simple-buddypress-signup-avatar.php:111
+msgid ""
+"Thank you for using Simple BuddyPress Signup Avatar! If you enjoy it, would "
+"you mind taking a moment to <a href=\"https://wordpress."
+"org/support/plugin/simple-buddypress-signup-avatar/reviews/#new-post\" "
+"target=\"_blank\">leave a review</a>?"
+msgstr ""
+"Bedankt voor het gebruik van Simple BuddyPress Signup Avatar! Als je "
+"tevreden bent, zou je een <a href=\"https://wordpress."
+"org/support/plugin/simple-buddypress-signup-avatar/reviews/#new-post\" "
+"target=\"_blank\">review</a> willen achterlaten?"
+
+#: bp_avatar_registration.php:64
 msgid "Upload Your Avatar (optional)"
 msgstr "Upload je avatar (optioneel)"
 
-#: bp_avatar_registration.php:55
+#: bp_avatar_registration.php:64
 msgid "Upload Your Avatar (required)"
-msgstr "Upload je avatar (verplicht)"
+msgstr "Upload je avatar (vereist)"
