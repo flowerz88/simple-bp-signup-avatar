@@ -39,13 +39,13 @@ For detailed information about using this plugin, please refer to the following 
 - [Contribution Guidelines](CONTRIBUTING.md)
 
 ## Changelog
-### 1.0.0
-- Initial release of Simple Buddypress Signup Avatar. Enjoy!
-
 ### 1.1.0
 - Security: Added enhanced file type verification with MIME type checking
 - Maintenance: Updated code structure and improved compatibility
 - Storage: Avatars now stored in dedicated secure folder to prevent unauthorized access
+
+### 1.0.0
+- Initial release of Simple Buddypress Signup Avatar. Enjoy!
 
 ## Support
 
