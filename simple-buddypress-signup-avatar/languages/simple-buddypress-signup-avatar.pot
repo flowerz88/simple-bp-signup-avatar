@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Custom BP Avatar Upload\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-04 11:12+0000\n"
+"POT-Creation-Date: 2025-07-20 17:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -20,13 +20,15 @@ msgstr ""
 msgid "100 = no compression (highest quality)"
 msgstr ""
 
-#. %d is the maximum dimension for both width and height in pixels
-#: bp_avatar_registration.php:70 bp_avatar_registration.php:128
+#: bp_avatar_registration.php:235
+msgid "An error occurred while processing your avatar. Please try again."
+msgstr ""
+
+#: bp_avatar_registration.php:77 bp_avatar_registration.php:166
 msgid "Avatar dimensions are too large. Maximum width and height is %d pixels."
 msgstr ""
 
-#. %d is the maximum file size in megabytes
-#: bp_avatar_registration.php:68 bp_avatar_registration.php:102
+#: bp_avatar_registration.php:76 bp_avatar_registration.php:110
 #, php-format
 msgid "Avatar is too large. Maximum file size is %1$d MB."
 msgstr ""
@@ -35,12 +37,16 @@ msgstr ""
 msgid "Avatar Required"
 msgstr ""
 
-#: bp_avatar_registration.php:186
+#: bp_avatar_registration.php:228
 msgid "Avatar upload failed. Please try again."
 msgstr ""
 
-#: bp_avatar_registration.php:189
+#: bp_avatar_registration.php:231
 msgid "Avatar upload is required."
+msgstr ""
+
+#. Author of the plugin
+msgid "Butterfly88"
 msgstr ""
 
 #. Description of the plugin
@@ -49,20 +55,40 @@ msgid ""
 "sign-up."
 msgstr ""
 
-#: bp_avatar_registration.php:71
+#: bp_avatar_registration.php:78
 msgid "Failed to load image. Please try another file."
 msgstr ""
 
-#: bp_avatar_registration.php:183
+#: bp_avatar_registration.php:144 bp_avatar_registration.php:174
 msgid "Failed to process the uploaded image. Please try again."
+msgstr ""
+
+#: bp_avatar_registration.php:195
+msgid "Failed to save the processed image. Please try again."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://github.com/flowerz88"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/flowerz88/simple-bp-signup-avatar"
 msgstr ""
 
 #: admin-settings.php:73
 msgid "Image Compression"
 msgstr ""
 
-#: bp_avatar_registration.php:66
+#: bp_avatar_registration.php:159
+msgid "Invalid file type detected."
+msgstr ""
+
+#: bp_avatar_registration.php:75 bp_avatar_registration.php:136
 msgid "Invalid file type. Please upload a JPEG, PNG or GIF image."
+msgstr ""
+
+#: simple-buddypress-signup-avatar.php:113
+msgid "Leave a Review"
 msgstr ""
 
 #: admin-settings.php:56
@@ -77,11 +103,19 @@ msgstr ""
 msgid "Max File Size (MB)"
 msgstr ""
 
+#: simple-buddypress-signup-avatar.php:115
+msgid "Never show again"
+msgstr ""
+
+#: simple-buddypress-signup-avatar.php:114
+msgid "Remind me later"
+msgstr ""
+
 #: admin-settings.php:81
 msgid "Save Settings"
 msgstr ""
 
-#: bp_avatar_registration.php:88
+#: bp_avatar_registration.php:96
 msgid "Security check failed. Please try again."
 msgstr ""
 
@@ -101,10 +135,18 @@ msgstr ""
 msgid "Simple Buddypress Signup Avatar Settings"
 msgstr ""
 
-#: bp_avatar_registration.php:55
+#: simple-buddypress-signup-avatar.php:111
+msgid ""
+"Thank you for using Simple BuddyPress Signup Avatar! If you enjoy it, would "
+"you mind taking a moment to <a href=\"https://wordpress."
+"org/support/plugin/simple-buddypress-signup-avatar/reviews/#new-post\" "
+"target=\"_blank\">leave a review</a>?"
+msgstr ""
+
+#: bp_avatar_registration.php:64
 msgid "Upload Your Avatar (optional)"
 msgstr ""
 
-#: bp_avatar_registration.php:55
+#: bp_avatar_registration.php:64
 msgid "Upload Your Avatar (required)"
 msgstr ""
